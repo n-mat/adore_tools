@@ -1,0 +1,66 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  #config.vm.box = "alvistack/ubuntu-22.04"
+  config.vm.box = "fasmat/ubuntu2204-desktop"
+  config.vm.provider "virtualbox" do |vb|
+     vb.gui = true
+     vb.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
+     vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+     vb.customize ["setextradata", :id, "CustomVideoMode1", "1920x1080x32"]
+     vb.customize ["setextradata", :id, "GUI/MaxGuestResolution", "1920x1080"]
+     host = RbConfig::CONFIG['host_os']
+     if host =~ /darwin|linux|bsd/
+      total_cores = `nproc`.to_i
+     elsif host =~ /mswin|mingw|cygwin/
+      total_cores = `wmic CPU get NumberOfCores /Value`.split('=')[1].to_i
+     end
+
+     vb.cpus = (total_cores / 2).to_i
+     if host =~ /darwin/
+        total_memory = `sysctl -n hw.memsize`.to_i / 1024 / 1024
+     elsif host =~ /linux|bsd/
+       total_memory = `free -m | awk '/Mem:/ {print $2}'`.to_i
+     elsif host =~ /mswin|mingw|cygwin/
+       total_memory = `wmic OS get TotalVisibleMemorySize /Value`.split('=')[1].to_i / 1024
+     end
+     vb.memory = (total_memory / 2).to_i
+   end
+
+  config.trigger.after [:provision] do |t|
+    t.name = "Reboot after provisioning"
+    t.run = { :inline => "vagrant reload" }
+  end
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "export DOCKER_BUILDKIT=0" >> /home/vagrant/.bashrc
+    apt-get install -y \
+      make \
+      ca-certificates \
+      curl \
+      gnupg \
+      lsb-release
+    mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    apt-get update
+    apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-compose
+    usermod -aG docker vagrant
+    apt-get install -y make git
+    runuser -l vagrant -c 'git config --global url."https://github.com/".insteadOf git@github.com:'
+    runuser -l vagrant -c 'git clone  --recurse-submodules -j8 git@github.com:eclipse/adore.git'
+    runuser -l vagrant -c 'git config --global --unset-all url.git@github.com:.insteadof'
+    runuser -l vagrant -c 'git config --global --unset-all url.https:github.com/.insteadof'
+    runuser -l vagrant -c 'git config --global --unset-all url.git://.insteadof'
+    cd adore
+    apt-get update
+    runuser -l vagrant -c 'newgrp docker'
+    runuser -l vagrant -c 'cd /home/vagrant/adore && make build'
+    runuser -l vagrant -c 'DOCKER_BUILDKIT=0 cd /home/vagrant/adore && make build_adore-cli'
+    echo "Add the following ssh key to github to be able to pull or push:"
+    runuser -l vagrant -c 'ssh-keygen -t rsa -f /home/vagrant/.ssh/id_rsa -q -P ""'
+    runuser -l vagrant -c 'cat /home/vagrant/.ssh/id_rsa.pub'
+   SHELL
+end
