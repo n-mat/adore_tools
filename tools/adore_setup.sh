@@ -83,13 +83,16 @@ install_docker(){
 
 clone_adore(){
     cd "${CLONE_DIR}"
-    git config --global url."https://github.com/".insteadOf "git@github.com:"
+    
     if [[ ! -d "adore" ]]; then
         git clone "${ADORE_REPO}"
     fi
     cd adore
+    git config --local url."https://github.com/".insteadOf "git@github.com:"
     git submodule update --init
-    git config --global --unset-all url."https://github.com/".insteadOf
+    
+    git config --local --unset-all url."https://github.com/".insteadOf
+    sed -i "s|https://github.com/|git@github.com:|g" .git/config
 }
 
 build_adore_cli(){
