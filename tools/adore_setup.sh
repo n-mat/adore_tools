@@ -46,7 +46,7 @@ ADORe will be setup on your system. The following system changes will occurs:
     printf "%s\n" "$coffee_cup"
 
     read -p "Do you want to proceed? (y/n): " answer
-    if ! [[ $answer == [Yy] ]]; then
+    if ! [[ $answer == [Yy] || $answer == [Yy][Ee][Ss] ]]; then
         exiterr "ADORe setup aborted."
     fi
 
