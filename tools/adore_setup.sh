@@ -6,7 +6,6 @@ trap 'get_help' INT
 
 
 exiterr (){ printf "$@\n"; exit 1;}
-SCRIPT_DIRECTORY="$(pwd)"
 
 CLONE_DIR="${HOME}"
 SUPPORTED_UBUNTU_VERSIONS="20.04 20.10 22.04"
