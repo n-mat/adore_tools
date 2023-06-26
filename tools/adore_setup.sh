@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-
+set -x
 set -euo pipefail
 trap 'get_help' INT
 
