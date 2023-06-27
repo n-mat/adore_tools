@@ -44,7 +44,9 @@ ADORe will be setup on your system. The following system changes will occurs:
    \`'--'\`
 "
     printf "%s\n" "$coffee_cup"
+    local answer=""
     while true; do
+        answer=""
         read -p "Do you want to proceed? (y/n): " answer
         if [[ $answer == [Nn] || $answer == [No][Oo] ]]; then
             exiterr "ADORe setup aborted."
