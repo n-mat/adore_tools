@@ -23,6 +23,23 @@ get_help(){
     printf "\n\n"
     exit $?
 }
+prompt_yes_no() {
+    while true; do
+        read -p "Do you want to proceed? (y/n)" answer
+        case "$answer" in
+            [Yy]|[Yy][Ee][Ss])
+                return 0
+                ;;
+            [Nn]|[Nn][Oo])
+                return 1
+                ;;
+            *)
+                echo "Invalid input. Please enter yes or no."
+                ;;
+        esac
+    done
+}
+
 
 banner(){
 
@@ -44,16 +61,9 @@ ADORe will be setup on your system. The following system changes will occurs:
    \`'--'\`
 "
     printf "%s\n" "$coffee_cup"
-    local answer=""
-    while true; do
-        answer=""
-        read -p "Do you want to proceed? (y/n): " answer
-        if [[ $answer == [Nn] || $answer == [No][Oo] ]]; then
-            exiterr "ADORe setup aborted."
-        elif [[ $answer == [Yy] || $answer == [Yy][Ee][Ss] ]]; then
-            break  
-        fi
-    done
+    if ! [[ $(prompt_yes_no) -eq 0 ]]; then
+       exiterr "ADORe setup aborted."
+    fi
 }
 
 
