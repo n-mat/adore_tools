@@ -44,12 +44,14 @@ ADORe will be setup on your system. The following system changes will occurs:
    \`'--'\`
 "
     printf "%s\n" "$coffee_cup"
-
-    read -p "Do you want to proceed? (y/n): " answer
-    if ! [[ $answer == [Yy] || $answer == [Yy][Ee][Ss] ]]; then
-        exiterr "ADORe setup aborted."
-    fi
-
+    while true; do
+        read -p "Do you want to proceed? (y/n): " answer
+        if [[ $answer == [Nn] || $answer == [No][Oo] ]]; then
+            exiterr "ADORe setup aborted."
+        elif [[ $answer == [Yy] || $answer == [Yy][Ee][Ss] ]]; then
+            break  
+        fi
+    done
 }
 
 
