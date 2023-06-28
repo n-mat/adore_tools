@@ -89,8 +89,7 @@ install_dependencies(){
 }
 
 install_docker(){
-    cd "${CLONE_DIR}/adore/adore_tools/tools"
-    bash install_docker.sh
+    bash <(curl -sSL https://raw.githubusercontent.com/DLR-TS/adore_tools/master/tools/install_docker.sh) 
 }
 
 clone_adore(){
