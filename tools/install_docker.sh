@@ -29,7 +29,6 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 sudo usermod -a -G docker $USER
-newgrp docker
-sudo docker run hello-world
+sg docker -c 'docker run hello-world'
 
 echo "You must log out and log back in for the docker group addition to take effect."
