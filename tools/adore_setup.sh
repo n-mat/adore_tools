@@ -100,13 +100,13 @@ clone_adore(){
     fi
     cd "${CLONE_DIR}/adore"
     cp .git/config .git/config.bak
-    set -x
     pwd
     cd "${CLONE_DIR}/adore"
-    sed -i "s|git@github.com:|https://github.com/|g" .git/config
+    cp .gitmodules .gitmodules.bak
+    sed -i "s|git@github.com:|https://github.com/|g" .gitmodules
     git submodule update --init
-    mv .git/config.bak .git/config
-    sed '/adore/s|https://github.com/|git@github.com:|'
+    mv .gitmodules.bak .gitmodules
+    git submodule sync
 }
 
 build_adore_cli(){
