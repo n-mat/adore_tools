@@ -85,7 +85,7 @@ check_freespace(){
 
 install_dependencies(){
     sudo apt-get update
-    sudo apt-get install make git
+    sudo apt-get install -y make git
 }
 
 install_docker(){
@@ -128,8 +128,8 @@ success(){
 banner
 check_freespace
 check_os_version
-clone_adore
 install_dependencies
+clone_adore
 install_docker
 build_adore_cli
 success
