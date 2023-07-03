@@ -99,9 +99,6 @@ clone_adore(){
         git clone "${ADORE_REPO}"
     fi
     cd "${CLONE_DIR}/adore"
-    cp .git/config .git/config.bak
-    pwd
-    cd "${CLONE_DIR}/adore"
     cp .gitmodules .gitmodules.bak
     sed -i "s|git@github.com:|https://github.com/|g" .gitmodules
     git submodule update --init
