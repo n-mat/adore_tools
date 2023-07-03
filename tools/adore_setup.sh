@@ -98,8 +98,11 @@ clone_adore(){
     if [[ ! -d "adore" ]]; then
         git clone "${ADORE_REPO}"
     fi
-    cd adore
+    cd "${CLONE_DIR}/adore"
     cp .git/config .git/config.bak
+    set -x
+    pwd
+    cd "${CLONE_DIR}/adore"
     sed -i "s|git@github.com:|https://github.com/|g" .git/config
     git submodule update --init
     mv .git/config.bak .git/config
