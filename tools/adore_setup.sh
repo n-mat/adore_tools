@@ -99,11 +99,11 @@ clone_adore(){
         git clone "${ADORE_REPO}"
     fi
     cd adore
-    git config --local url."https://github.com/".insteadOf "git@github.com:"
+    mv .git/config .git/config.bak
     sed -i "s|git@github.com:|https://github.com/|g" .git/config
     git submodule update --init
-    git config --local --unset-all url."https://github.com/".insteadOf
-    sed -i "s|https://github.com/|git@github.com:|g" .git/config
+    mv .git/config.bak .git/config
+    sed '/adore/s|https://github.com/|git@github.com:|'
 }
 
 build_adore_cli(){
