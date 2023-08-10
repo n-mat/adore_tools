@@ -1,0 +1,23 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-22.04"
+  
+  host = RbConfig::CONFIG['host_os']
+  if host =~ /darwin|linux|bsd/
+    total_memory = `free -m | awk '/Mem:/ {print $2}'`.to_i
+    total_cores = `nproc`.to_i
+  elsif host =~ /mswin|mingw|cygwin/
+    total_memory = `wmic OS get TotalVisibleMemorySize /Value`.split('=')[1].to_i / 1024
+    total_cores = `wmic CPU get NumberOfCores /Value`.split('=')[1].to_i
+  end
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = (total_memory / 2).to_i
+    vb.cpus = (total_cores / 2).to_i
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update
+    sudo apt-get install -y make curl
+    ##bash <(curl -sSL https://raw.githubusercontent.com/DLR-TS/adore_tools/master/tools/adore_setup.sh)
+  SHELL
+end

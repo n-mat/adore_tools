@@ -30,7 +30,7 @@ prompt_yes_no() {
                 return 0
                 ;;
             [Nn]|[Nn][Oo])
-                return 1
+                exit 1
                 ;;
             *)
                 echo "Invalid input. Please enter yes or no."
