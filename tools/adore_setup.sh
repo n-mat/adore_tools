@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 set -euo pipefail
 trap 'get_help' INT
 
@@ -89,7 +90,8 @@ install_dependencies(){
 }
 
 install_docker(){
-    bash <(curl -sSL https://raw.githubusercontent.com/DLR-TS/adore_tools/master/tools/install_docker.sh) 
+    bash <(curl -sSL https://raw.githubusercontent.com/DLR-TS/adore_tools/master/tools/install_docker.sh)
+    newgrp docker
 }
 
 clone_adore(){
