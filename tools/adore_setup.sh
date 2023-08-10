@@ -22,10 +22,11 @@ get_help(){
     printf "\n\n"
     exit $?
 }
+
 prompt_yes_no() {
     while true; do
-        read -p "Do you want to proceed? (y/n)" answer
-        case "$answer" in
+        read -rp "Do you want to proceed? (yes/no): " choice
+        case $choice in
             [Yy]|[Yy][Ee][Ss])
                 return 0
                 ;;
@@ -33,7 +34,7 @@ prompt_yes_no() {
                 return 1
                 ;;
             *)
-                echo "Invalid input. Please enter yes or no."
+                echo "Please enter 'yes' or 'no'."
                 ;;
         esac
     done
@@ -60,7 +61,7 @@ ADORe will be setup on your system. The following system changes will occurs:
    \`'--'\`
 "
     printf "%s\n" "$coffee_cup"
-    if [[ $(prompt_yes_no) -eq 1 ]]; then
+    if ! prompt_yes_no; then
        exiterr "ADORe setup aborted."
     fi
 }
@@ -77,8 +78,7 @@ check_os_version(){
 check_freespace(){
     freespace=$(df -h --output=avail . | tail -n 1 | awk '{print $1}' | sed "s|G||g")
     current_device=$(df --output=source . | tail -n 1)
-
-    if (( freespace <= REQUIRED_FREESPACE_GB )); then
+    if (( $(echo "$freespace <= $REQUIRED_FREESPACE_GB" | bc -l) )); then     
         exiterr "ERROR: Not enough free space: ${freespace} available and: ${REQUIRED_FREESPACE_GB} required.\n Free up some space on '${current_device}' and try again."
     fi 
 }
@@ -124,6 +124,7 @@ success(){
     printf "  Get help: ${ADORE_HELP_LINK}\n"
     printf "\n"
 }
+
 
 banner
 check_freespace
