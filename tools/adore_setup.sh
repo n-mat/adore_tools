@@ -30,7 +30,7 @@ prompt_yes_no() {
                 return 0
                 ;;
             [Nn]|[Nn][Oo])
-                exit 1
+                return 1
                 ;;
             *)
                 echo "Invalid input. Please enter yes or no."
@@ -60,7 +60,7 @@ ADORe will be setup on your system. The following system changes will occurs:
    \`'--'\`
 "
     printf "%s\n" "$coffee_cup"
-    if ! [[ $(prompt_yes_no) -eq 0 ]]; then
+    if [[ $(prompt_yes_no) -eq 1 ]]; then
        exiterr "ADORe setup aborted."
     fi
 }
