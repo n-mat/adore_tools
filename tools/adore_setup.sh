@@ -110,7 +110,6 @@ clone_adore(){
 }
 
 build_adore_cli(){
-
 newgrp docker << END
     cd "${CLONE_DIR}/adore"
     make build
@@ -128,7 +127,6 @@ success(){
     printf "  Get help: ${ADORE_HELP_LINK}\n"
     printf "\n"
 }
-
 
 banner
 check_freespace
