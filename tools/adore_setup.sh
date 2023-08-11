@@ -2,6 +2,8 @@
 
 
 set -euo pipefail
+
+set -x
 trap 'get_help' INT
 
 
