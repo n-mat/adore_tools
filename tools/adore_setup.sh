@@ -3,8 +3,7 @@
 
 set -euo pipefail
 
-set -x
-trap 'get_help' INT
+trap 'get_help' EXIT
 
 
 exiterr (){ printf "$@\n"; exit 1;}
@@ -19,11 +18,15 @@ ADORE_DOCS_LINK="https://eclipse.github.io/adore/"
 
 
 get_help(){
+    local exit_status=$?
+    if [ $exit_status -ne 0 ]; then
+      echo "ERROR: ADORe setup failed." >&2
+    fi
     printf "\n\n"
     printf "Having trouble? Reach out to the ADORe team, we are here to help!\n"
     printf "  https://github.com/eclipse/adore/issues \n"
     printf "\n\n"
-    exit $?
+    exit $exit_status
 }
 
 prompt_yes_no() {
@@ -48,11 +51,19 @@ banner(){
 
 coffee_cup="
 ADORe will be setup on your system. The following system changes will occurs:
-   - Docker will be installed or updated
-   - APT dependencies 'make' and 'git' will be installed
-   - ADORe will be cloned to: ${CLONE_DIR}/adore
-   - You may be prompted for sudo password
+   - Your OS version will be checked against supported versions
+   - Docker will be installed or updated using a setup script based off of the official docker docs: https://docs.docker.com/engine/install/ubuntu/
+   - APT dependencies 'gnu make' and 'git' will be installed
+   - ADORe (${ADORE_REPO}) will be cloned to: ${CLONE_DIR}/adore
+   - ADORe core modules will be built with \"make build\"
+   - You may be prompted for sudo password (root priviliges are needed to install docker, make, and git)
 
+ADORe Requirements:
+   - ADORe requires a minimum of 20GB of storage
+   - Recent version of docker 
+   - This script is designed and tested for Ubuntu
+   - adore_if_carla requires and additional 20GB of storage
+ 
    Initial setup can take 10-15 minutes depending on system and internet connection.
    Grab a cup of coffee and wait for the setup to complete.
 
