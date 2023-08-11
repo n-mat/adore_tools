@@ -135,8 +135,7 @@ check_os_version
 install_dependencies
 clone_adore
 install_docker
-(
-newgrp docker
+newgrp docker << END
 build_adore_cli
-)
+END
 success
