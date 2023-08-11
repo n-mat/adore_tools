@@ -111,11 +111,12 @@ clone_adore(){
 
 build_adore_cli(){
 
+newgrp docker << END
     cd "${CLONE_DIR}/adore"
     make build
     make build_adore-cli
     make build_catkin_base
-
+END
 }
 
 success(){
@@ -135,7 +136,5 @@ check_os_version
 install_dependencies
 clone_adore
 install_docker
-newgrp docker << END
 build_adore_cli
-END
 success
