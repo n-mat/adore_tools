@@ -91,7 +91,6 @@ install_dependencies(){
 
 install_docker(){
     bash <(curl -sSL https://raw.githubusercontent.com/DLR-TS/adore_tools/master/tools/install_docker.sh)
-    newgrp docker
 }
 
 clone_adore(){
@@ -134,5 +133,6 @@ check_os_version
 install_dependencies
 clone_adore
 install_docker
+newgrp docker
 build_adore_cli
 success
