@@ -115,6 +115,8 @@ ADORe Requirements:
         if ! prompt_yes_no; then
             exiterr "ADORe setup aborted."
         fi
+    else
+        echo "INFO: Doing headless/unattended installation."
     fi
 }
 
