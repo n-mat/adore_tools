@@ -52,16 +52,13 @@ function parse_params() {
     -h | --help) usage ;;
     -v | --verbose) set -x ;;
     -H | --headless) HEADLESS=1 ;;
-    -?*) die "Unknown option: $1" ;;
+    -?*) exiterr "ERROR: Unknown option: $1" ;;
     *) break ;;
     esac
     shift
   done
 
   args=("$@")
-
-  echo "HEADLESS: ${HEADLESS}"
-  exit 1
 
   return 0
 }
@@ -181,7 +178,7 @@ success(){
     printf "\n"
 }
 
-parse_params
+parse_params "$*"
 banner
 check_freespace
 check_os_version
