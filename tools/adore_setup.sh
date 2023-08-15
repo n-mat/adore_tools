@@ -60,6 +60,8 @@ function parse_params() {
 
   args=("$@")
 
+  echo "HEADLESS: ${HEADLESS}"
+  exit 1
 
   return 0
 }
