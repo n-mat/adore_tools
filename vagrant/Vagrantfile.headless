@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell", inline: <<-SHELL
+    export DEBIAN_FRONTEND=noninteractive
     sudo apt-get update
     sudo apt-get install -y make curl
     ##bash <(curl -sSL https://raw.githubusercontent.com/DLR-TS/adore_tools/master/tools/adore_setup.sh)

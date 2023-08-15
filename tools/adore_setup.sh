@@ -16,6 +16,7 @@ ADORE_REPO="https://github.com/eclipse/adore.git"
 ADORE_HELP_LINK="https://github.com/eclipse/adore/issues"
 ADORE_DOCS_LINK="https://eclipse.github.io/adore/"
 
+HEADLESS=0
 
 get_help(){
     local exit_status=$?
@@ -28,6 +29,41 @@ get_help(){
     printf "\n\n"
     exit $exit_status
 }
+
+usage() {
+  cat << EOF # remove the space between << and EOF, this is due to web plugin issue
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
+
+Script description here.
+
+Available options:
+
+-h, --help         Print this help and exit
+-H, --headless     Run ADORe installation in headless mode 
+-v, --verbose      Print script debug info
+EOF
+  exit
+}
+
+function parse_params() {
+
+  while :; do
+    case "${1-}" in
+    -h | --help) usage ;;
+    -v | --verbose) set -x ;;
+    -H | --headless) HEADLESS=1 ;;
+    -?*) die "Unknown option: $1" ;;
+    *) break ;;
+    esac
+    shift
+  done
+
+  args=("$@")
+
+
+  return 0
+}
+
 
 prompt_yes_no() {
     while true; do
@@ -75,8 +111,10 @@ ADORe Requirements:
    \`'--'\`
 "
     printf "%s\n" "$coffee_cup"
-    if ! prompt_yes_no; then
-       exiterr "ADORe setup aborted."
+    if [[ $HEADLESS == 0 ]]; then 
+        if ! prompt_yes_no; then
+            exiterr "ADORe setup aborted."
+        fi
     fi
 }
 
@@ -139,6 +177,7 @@ success(){
     printf "\n"
 }
 
+parse_params
 banner
 check_freespace
 check_os_version
@@ -146,4 +185,7 @@ install_dependencies
 clone_adore
 install_docker
 build_adore_cli
+if [[ $HEADLESS == 1 ]]; then
+    make run_test_scenarios
+fi
 success
