@@ -142,6 +142,8 @@ install_dependencies(){
 }
 
 install_docker(){
+    sudo groupadd docker
+    sudo usermod -aG docker ${USER}
     bash <(curl -sSL https://raw.githubusercontent.com/DLR-TS/adore_tools/master/tools/install_docker.sh)
 }
 
