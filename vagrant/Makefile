@@ -9,7 +9,7 @@ help:
 
 .PHONY: install_vagrant_plugins
 install_vagrant_plugins:
-    @if vagrant plugin list | grep -q 'vagrant-reload'; then \
+	@if vagrant plugin list | grep -q 'vagrant-reload'; then \
         echo "vagrant-reload plugin is already installed."; \
     else \
         echo "Installing vagrant-reload plugin..."; \
@@ -17,26 +17,31 @@ install_vagrant_plugins:
     fi
 
 .PHONY: up
-up: destroy install_vagrant_plugins start_vagrant_headless
+up: up_headed
 
+.PHONY: up_headless
+up_headless: destroy install_vagrant_plugins start_vagrant_headless
 
+.PHONY: up_headed
+up_headed: destroy install_vagrant_plugins start_vagrant_headed
 
 .PHONY: start_vagrant_headless
 start_vagrant_headless: ## Start a virtualbox VM with no display active
-	vagrant plugin install vagrant-reload
-	vagrant up
+	VAGRANT_VAGRANTFILE=Vagrantfile.headless vagrant up
 
 .PHONY: start_vagrant_headed
 start_vagrant_headed: ## Start a virtualbox VM with an active display and desktop environment
-	vagrant up
+	VAGRANT_VAGRANTFILE=Vagrantfile.headed vagrant up
 
 .PHONY: ssh
 ssh: ## Connect to running VM
-	vagrant ssh
+	VAGRANT_VAGRANTFILE=Vagrantfile.headless vagrant ssh || true
+	VAGRANT_VAGRANTFILE=Vagrantfile.headed vagrant ssh || true
 
 .PHONY: halt
 halt: ## Halt running VM
-	vagrant halt -f
+	VAGRANT_VAGRANTFILE=Vagrantfile.headless vagrant halt -f || true
+	VAGRANT_VAGRANTFILE=Vagrantfile.headed vagrant halt -f || true
 
 .PHONY: destroy
 destroy: ## Destory VM
