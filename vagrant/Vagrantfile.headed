@@ -32,6 +32,7 @@ Vagrant.configure("2") do |config|
     t.name = "Reboot after provisioning"
     t.run = { :inline => "vagrant reload" }
   end
+
   config.vm.provision "shell", inline: <<-SHELL
     echo "export DOCKER_BUILDKIT=0" >> /home/vagrant/.bashrc
     apt-get install -y \
@@ -49,18 +50,5 @@ Vagrant.configure("2") do |config|
     apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-compose
     usermod -aG docker vagrant
     apt-get install -y make git
-    runuser -l vagrant -c 'git config --global url."https://github.com/".insteadOf git@github.com:'
-    runuser -l vagrant -c 'git clone  --recurse-submodules -j8 git@github.com:eclipse/adore.git'
-    runuser -l vagrant -c 'git config --global --unset-all url.git@github.com:.insteadof'
-    runuser -l vagrant -c 'git config --global --unset-all url.https:github.com/.insteadof'
-    runuser -l vagrant -c 'git config --global --unset-all url.git://.insteadof'
-    cd adore
-    apt-get update
-    runuser -l vagrant -c 'newgrp docker'
-    runuser -l vagrant -c 'cd /home/vagrant/adore && make build'
-    runuser -l vagrant -c 'DOCKER_BUILDKIT=0 cd /home/vagrant/adore && make build_adore-cli'
-    echo "Add the following ssh key to github to be able to pull or push:"
-    runuser -l vagrant -c 'ssh-keygen -t rsa -f /home/vagrant/.ssh/id_rsa -q -P ""'
-    runuser -l vagrant -c 'cat /home/vagrant/.ssh/id_rsa.pub'
    SHELL
 end
