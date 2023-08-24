@@ -163,7 +163,7 @@ build_adore_cli(){
 newgrp docker << END
     cd "${CLONE_DIR}/adore"
     make build
-    make build_adore-cli
+    make cli
     make build_catkin_base
 END
 }
