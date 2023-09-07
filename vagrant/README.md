@@ -15,7 +15,7 @@ all ADORe core modules built.
 2. Install Vagrant: [https://www.vagrantup.com/ 🔗](https://www.vagrantup.com/)
 3. Run vagrant with the provided make targets:
 ```bash
-make up
+make up_headed
 ```
 or headless:
 ```bash
@@ -27,3 +27,5 @@ There is a make target provided to clean up the virtual machines:
 ```bash
 make destroy
 ```
+
+

@@ -44,6 +44,7 @@ halt: ## Halt running VM
 	VAGRANT_VAGRANTFILE=Vagrantfile.headed vagrant halt -f || true
 
 .PHONY: destroy
-destroy: ## Destory VM
-	vagrant destroy -f
+destroy: halt ## Destory VM
+	VAGRANT_VAGRANTFILE=Vagrantfile.headless vagrant destroy -f || true
+	VAGRANT_VAGRANTFILE=Vagrantfile.headed vagrant destroy -f || true
 
