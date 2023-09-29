@@ -9,7 +9,7 @@ SCRIPT_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 export SUBMODULES_PATH="$(pwd)"
 
 
-EXCLUDED_MODULES="lizard_docker make_gadgets apt_cacher_ng_docker catkin_docker ci_teststand cppcheck_docker cpplint_docker catkin_docker"
+EXCLUDED_MODULES="lizard_docker make_gadgets apt_cacher_ng_docker catkin_docker ci_teststand cppcheck_docker cpplint_docker catkin_docker adore_if_carla"
 EXCLUDED_MODULES=$(echo "$EXCLUDED_MODULES" | tr ' ' '\n' )
 
 
